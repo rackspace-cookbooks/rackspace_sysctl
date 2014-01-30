@@ -40,6 +40,7 @@ action :save do
   new_resource.updated_by_last_action(true)
 end
 
+# directly set a bunch of parameters without persisting them to a file
 action :set do
   new_resource.instructions.each do |variable, value|
     execute 'set sysctl' do
@@ -49,6 +50,7 @@ action :set do
   new_resource.updated_by_last_action(true)
 end
 
+# remove the file responsible for a sysctl value
 action :remove do
   file get_path do
     action :delete

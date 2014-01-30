@@ -17,18 +17,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# runs the sysctl parameter file if given an argument
 action :save do
 
-  fullname = get_path
+  fullname = path_value
 
+  # see next file resource for more info
   execute 'sysctl-p' do
     command "sysctl -p #{fullname}"
     action :nothing
   end
 
-  file get_path do
+  # fill a fill with var=val and then message the execute above
+  file path_value do
     notifies :run, 'execute[sysctl-p]'
-    content "#{get_variable} = #{new_resource.value}\n"
+    content "#{variable_name} = #{new_resource.value}\n"
     owner 'root'
     group 'root'
     mode '0644'
@@ -36,27 +40,29 @@ action :save do
   new_resource.updated_by_last_action(true)
 end
 
+# directly set a sysctl value (without persisting it)
 action :set do
   execute 'set sysctl' do
-    command "sysctl #{get_variable}=#{new_resource.value}"
+    command "sysctl #{variable_name}=#{new_resource.value}"
   end
   new_resource.updated_by_last_action(true)
 end
 
+# delete the file responsible for a sysctl value
 action :remove do
-  file get_path do
+  file path_value do
     action :delete
   end
   new_resource.updated_by_last_action(true)
 end
 
-def path
+def path_value
   f_name = new_resource.name.gsub(' ', '_')
   priority = new_resource.priority
   return new_resource.path ? new_resource.path : \
     "/etc/sysctl.d/#{priority}-#{f_name}.conf"
 end
 
-def variable
+def variable_name
   return new_resource.variable ? new_resource.variable : new_resource.name
 end
