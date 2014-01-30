@@ -18,11 +18,6 @@
 # limitations under the License.
 #
 
-package 'fake-procps' do
-  action :install
-  only_if { platform?('fedora') }
-end
-
 # TODO(Youscribe) change this by something more "clean".
 execute 'remove old files' do
   command 'rm --force /etc/sysctl.d/50-chef-attributes-*.conf'

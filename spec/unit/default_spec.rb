@@ -12,18 +12,30 @@ describe 'rackspace_sysctl::default' do
     end.converge(described_recipe)
   end
 
-  # check that package is correctly installed
-  it 'installs sysctl' do
-    expect(chef_run).to install_package 'sysctl'
+  it '/etc/sysctl.d should exist with permissions and ownership' do
+    expect(chef_run)
+      .to create_directory('/etc/sysctl.d')
+      .with_owner('root')
+      .with_group('root')
+      .with_mode('755')
   end
 
   # check config template exists, right modes and owners
-  it 'create template file with permissions and ownership' do
-    expect(chef_run)
-      .to create_template('/etc/sysctl.conf')
-      .with_owner('root')
-      .with_group('root')
-      .with_mode(0440)
+  it 'create template files with permissions and ownership' do
+
+    # /etc/sysctl.d/50-chef-attributes-#{f_name}.conf
+
+    if node.attribute?('sysctl')
+      node['sysctl'].each do |item|
+        f_name = item.first.gsub(' ', '_')
+
+        expect(chef_run)
+          .to create_template("/etc/sysctl.d/50-chef-attributes-#{f_name}.conf")
+          .with_owner('root')
+          .with_group('root')
+          .with_mode(0644)
+      end
+    end
   end
 
   it 'populate config template with correct values' do
@@ -34,9 +46,7 @@ describe 'rackspace_sysctl::default' do
       .with_content('-l 127.0.0.1')
   end
 
-  # check service is enabled on boot
-  it 'start sysctl service' do
-    expect(chef_run).to enable_service('sysctl')
-    expect(chef_run).to start_service('sysctl')
+  it 'make sure it runs sysctl -p' do
+    expect(chef_run.execute('sysctl -p'))
   end
 end
