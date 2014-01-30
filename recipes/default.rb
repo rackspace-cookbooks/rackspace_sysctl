@@ -18,11 +18,10 @@
 # limitations under the License.
 #
 
-package "fake-procps" do
+package 'fake-procps' do
   action :install
-  only_if { platform?("fedora") }
+  only_if { platform?('fedora') }
 end
-
 
 # TODO(Youscribe) change this by something more "clean".
 execute 'remove old files' do
@@ -31,7 +30,7 @@ execute 'remove old files' do
 end
 
 # redhat supports sysctl.d but doesn't create it by default
-directory "/etc/sysctl.d" do
+directory '/etc/sysctl.d' do
   owner 'root'
   group 'root'
   mode '755'
@@ -45,13 +44,13 @@ if node.attribute?('sysctl')
       mode '0644'
       owner 'root'
       group 'root'
-      variables(:instructions => item[1])
-      notifies :run, "execute[sysctl-p]"
+      variables('instructions' => item[1])
+      notifies :run, 'execute[sysctl-p]'
     end
   end
 end
 
-execute "sysctl-p" do
+execute 'sysctl-p' do
   Dir.glob('/etc/sysctl.d/*.conf').each do |file|
     command  "sysctl -p #{file}"
   end
