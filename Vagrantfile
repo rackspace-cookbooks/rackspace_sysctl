@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
     }
 
     chef.run_list = [
-        "recipe[sysctl::default]"
+        "recipe[rackspace_sysctl::default]"
     ]
   end
 end
