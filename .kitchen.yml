@@ -9,7 +9,7 @@ platforms:
     box: opscode-ubuntu-12.04
     box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
   run_list:
-  - recipe[apt]
+  - recipe[rackspace_apt]
 
 - name: centos-6.4
   driver_config:
@@ -18,5 +18,5 @@ platforms:
 
 suites:
 - name: default
-  run_list: ["recipe[sysctl]"]
+  run_list: ["recipe[rackspace_sysctl]"]
   attributes: {}

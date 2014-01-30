@@ -3,5 +3,5 @@ site :opscode
 metadata
 
 group :integration do
-  cookbook "apt", github: "rackspace-cookbooks/apt"
+  cookbook "rackspace_apt", github: "rackspace-cookbooks/rackspace_apt"
 end
