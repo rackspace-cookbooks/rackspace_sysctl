@@ -33,11 +33,11 @@ end
 
 # due to the fact that the template has to support a large list
 # of parameters in one file, it must accept a config hash, but this invocation
-# below only supplies a single config entry. |variable| becomes an array, so 
+# below only supplies a single config entry. |variable| becomes an array, so
 # I have had to repack it in 'pair' before passing it back to the template
 node['rackspace_sysctl']['config'].each do |variable|
   f_name = variable.first.gsub(' ', '_')
-  pair = {variable[0] => variable[1]}
+  pair = { variable[0] => variable[1] }
   template "/etc/sysctl.d/50-chef-attributes-#{f_name}.conf" do
     source 'sysctl.conf.erb'
     mode '0644'

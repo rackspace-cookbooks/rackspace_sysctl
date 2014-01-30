@@ -23,16 +23,16 @@ describe 'rackspace_sysctl::default' do
 
     # see converge above for sample values I'm testing for
     expect(chef_run)
-      .to create_template("/etc/sysctl.d/50-chef-attributes-vm.swapiness.conf")
+      .to create_template('/etc/sysctl.d/50-chef-attributes-vm.swappiness.conf')
       .with_owner('root')
       .with_group('root')
-      .with_mode(0644)
+      .with_mode('0644')
   end
 
   it 'populate config template with correct values' do
     expect(chef_run)
-      .to render_file('/etc/sysctl.d/50-chef-attributes-vm.swapiness.conf')
-      .with_content('vm.swapiness = 10')
+      .to render_file('/etc/sysctl.d/50-chef-attributes-vm.swappiness.conf')
+      .with_content('vm.swappiness = 10')
   end
 
   it 'make sure it runs sysctl -p' do
