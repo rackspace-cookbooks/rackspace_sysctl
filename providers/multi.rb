@@ -19,16 +19,16 @@
 #
 action :save do
 
-  fullname = get_path
+  fullname = path_value
 
   execute 'sysctl-p' do
     command "sysctl -p #{fullname}"
     action :nothing
   end
 
-  template get_path do
+  template path_value do
     source 'sysctl.conf.erb'
-    cookbook 'sysctl'
+    cookbook 'rackspace_sysctl'
     owner 'root'
     group 'root'
     mode '0644'
@@ -60,7 +60,7 @@ end
 
 private
 
-def path
+def path_value
   f_name = new_resource.name.gsub(' ', '_')
   priority = new_resource.priority
   return new_resource.path ? new_resource.path : \
