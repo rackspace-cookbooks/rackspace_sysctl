@@ -35,7 +35,7 @@ end
 # of parameters in one file, it must accept a config hash, but this invocation
 # below only supplies a single config entry. |variable| becomes an array, so
 # I have had to repack it in 'pair' before passing it back to the template
-template "/etc/sysctl.d/50-chef-attributes.conf" do
+template '/etc/sysctl.d/50-chef-attributes.conf' do
   source 'sysctl.conf.erb'
   mode '0644'
   owner 'root'
