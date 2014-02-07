@@ -49,13 +49,3 @@ execute 'sysctl-runfiles' do
   end
   action :nothing
 end
-
-
-
-rackspace_sysctl 'vm.swappiness' do
-  value '99'
-end
-
-rackspace_sysctl_multi 'awesome' do
-  instructions 'vm.swappiness' => '50', 'kernel.sysrq' => '1'
-end
