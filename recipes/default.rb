@@ -35,17 +35,13 @@ end
 # of parameters in one file, it must accept a config hash, but this invocation
 # below only supplies a single config entry. |variable| becomes an array, so
 # I have had to repack it in 'pair' before passing it back to the template
-node['rackspace_sysctl']['config'].each do |variable|
-  f_name = variable.first.gsub(' ', '_')
-  pair = { variable[0] => variable[1] }
-  template "/etc/sysctl.d/50-chef-attributes-#{f_name}.conf" do
-    source 'sysctl.conf.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    variables('name' => variable.first, 'instructions' => pair)
-    notifies :run, 'execute[sysctl-runfiles]'
-  end
+template "/etc/sysctl.d/50-chef-attributes.conf" do
+  source 'sysctl.conf.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  variables('instructions' => node['rackspace_sysctl']['config'])
+  notifies :run, 'execute[sysctl-runfiles]'
 end
 
 # only run when notified
