@@ -8,7 +8,6 @@ group :testing do
   gem 'rspec',      '~> 2.14'
   gem 'rubocop',    '~> 0.16' 
   gem 'berkshelf',  '~> 2.0.13'
-  gem 'vagrant-wrapper', '~> 1.2.1.1'
 end
  
 group :integration do
