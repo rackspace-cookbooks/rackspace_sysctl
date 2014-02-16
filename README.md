@@ -1,19 +1,6 @@
-Support
-=======
-
-Issues have been disabled for this repository.  
-Any issues with this cookbook should be raised here:
-
-[https://github.com/rcbops/chef-cookbooks/issues](https://github.com/rcbops/chef-cookbooks/issues)
-
-Please title the issue as follows:
-
-[sysctl]: \<short description of problem\>
-
-In the issue description, please include a longer description of the issue, along with any relevant log/command/error output.  
-If logfiles are extremely long, please place the relevant portion into the issue description, and link to a gist containing the entire logfile
-
-Please see the [contribution guidelines](CONTRIBUTING.md) for more information about contributing to this cookbook.
+rackspace_syslog
+================
+This cookbook allows for setting syctl attributes by use of either a LWRP or by populating a known hash which will write out all values to sysctl.conf.
 
 Description
 ===========
@@ -23,16 +10,17 @@ Set sysctl values from Chef!
 Attributes
 ==========
 
-* `node['sysctl']` - A namespace for sysctl settings.
+* `node['rackspace_sysctl']['config']` - A predetermined hash for sysctl settings.
 
 Usage
 =====
 
 There are two ways of setting sysctl values:
 
-1. Set chef attributes in the **sysctl** namespace. e.g.:
+1. Set chef attributes in the **rackspace_sysctl** namespace. The `key` should be the exact directive expected by sysctl:
 
-        node.set['sysctl']['set swappiness'] = { 'vm.swappiness' => '20' }
+        node.set['rackspace_sysctl']['config']['vm.swappiness'] = 10
+
 2. Set values in a `cookbook_file` Resource.
 3. With Ressource/Provider.
 
@@ -113,3 +101,29 @@ sysctl_multi
         'net.ipv4.tcp_syncookies' => '1'}
     end
 
+Contributing
+------------
+* Please read the [main contribution guide](https://github.com/rcbops/chef-cookbooks/blob/master/CONTRIBUTING.md).
+
+Testing
+-------
+* Please read the [testing guide](https://github.com/rcbops/chef-cookbooks/blob/master/CONTRIBUTING.md).
+
+Licsense and Author
+-------------------
+
+```text
+Copyright:: 2009-2013 Opscode, Inc
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

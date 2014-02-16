@@ -18,40 +18,32 @@
 # limitations under the License.
 #
 
-package "fake-procps" do
-  action :install
-  only_if { platform?("fedora") }
-end
-
-
 # TODO(Youscribe) change this by something more "clean".
 execute 'remove old files' do
-  command 'rm --force /etc/sysctl.d/50-chef-attributes-*.conf'
+  command 'rm --force /etc/sysctl.d/50-chef-attributes.conf'
   action :run
 end
 
 # redhat supports sysctl.d but doesn't create it by default
-directory "/etc/sysctl.d" do
+directory '/etc/sysctl.d' do
   owner 'root'
   group 'root'
   mode '755'
 end
 
-if node.attribute?('sysctl')
-  node['sysctl'].each do |item|
-    f_name = item.first.gsub(' ', '_')
-    template "/etc/sysctl.d/50-chef-attributes-#{f_name}.conf" do
-      source 'sysctl.conf.erb'
-      mode '0644'
-      owner 'root'
-      group 'root'
-      variables(:instructions => item[1])
-      notifies :run, "execute[sysctl-p]"
-    end
-  end
+# pass config hash to template
+template '/etc/sysctl.d/50-chef-attributes.conf' do
+  source 'sysctl.conf.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  variables('instructions' => node['rackspace_sysctl']['config'])
+  notifies :run, 'execute[sysctl-runfiles]'
 end
 
-execute "sysctl-p" do
+# only run when notified
+execute 'sysctl-runfiles' do
+  command '/bin/true' # when no conf files, need a default command
   Dir.glob('/etc/sysctl.d/*.conf').each do |file|
     command  "sysctl -p #{file}"
   end
