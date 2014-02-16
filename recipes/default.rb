@@ -20,7 +20,7 @@
 
 # TODO(Youscribe) change this by something more "clean".
 execute 'remove old files' do
-  command 'rm --force /etc/sysctl.d/50-chef-attributes-*.conf'
+  command 'rm --force /etc/sysctl.d/50-chef-attributes.conf'
   action :run
 end
 
@@ -31,25 +31,19 @@ directory '/etc/sysctl.d' do
   mode '755'
 end
 
-# due to the fact that the template has to support a large list
-# of parameters in one file, it must accept a config hash, but this invocation
-# below only supplies a single config entry. |variable| becomes an array, so
-# I have had to repack it in 'pair' before passing it back to the template
-node['rackspace_sysctl']['config'].each do |variable|
-  f_name = variable.first.gsub(' ', '_')
-  pair = { variable[0] => variable[1] }
-  template "/etc/sysctl.d/50-chef-attributes-#{f_name}.conf" do
-    source 'sysctl.conf.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    variables('name' => variable.first, 'instructions' => pair)
-    notifies :run, 'execute[sysctl-runfiles]'
-  end
+# pass config hash to template
+template '/etc/sysctl.d/50-chef-attributes.conf' do
+  source 'sysctl.conf.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  variables('instructions' => node['rackspace_sysctl']['config'])
+  notifies :run, 'execute[sysctl-runfiles]'
 end
 
 # only run when notified
 execute 'sysctl-runfiles' do
+  command '/bin/true' # when no conf files, need a default command
   Dir.glob('/etc/sysctl.d/*.conf').each do |file|
     command  "sysctl -p #{file}"
   end

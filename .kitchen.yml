@@ -25,3 +25,9 @@ suites:
 - name: default
   run_list: ["recipe[rackspace_sysctl]"]
   attributes: {}
+
+- name: lwrps
+  run_list:
+  - recipe[rackspace_sysctl] # required for rackspace_sysctl_Test::lwrps
+  - recipe[rackspace_sysctl_test::lwrps]
+  attributes: {}

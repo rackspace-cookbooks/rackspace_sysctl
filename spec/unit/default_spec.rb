@@ -7,6 +7,7 @@ describe 'rackspace_sysctl::default' do
   let(:chef_run) do
     ChefSpec::Runner.new(platform: 'ubuntu', version: '12.04') do |node|
       node.set['rackspace_sysctl']['config']['vm.swappiness'] = 10
+      node.set['rackspace_sysctl']['config']['kernel.sysrq'] = 1
     end.converge(described_recipe)
   end
 
@@ -23,7 +24,7 @@ describe 'rackspace_sysctl::default' do
 
     # see converge above for sample values I'm testing for
     expect(chef_run)
-      .to create_template('/etc/sysctl.d/50-chef-attributes-vm.swappiness.conf')
+      .to create_template('/etc/sysctl.d/50-chef-attributes.conf')
       .with_owner('root')
       .with_group('root')
       .with_mode('0644')
@@ -31,8 +32,9 @@ describe 'rackspace_sysctl::default' do
 
   it 'populate config template with correct values' do
     expect(chef_run)
-      .to render_file('/etc/sysctl.d/50-chef-attributes-vm.swappiness.conf')
+      .to render_file('/etc/sysctl.d/50-chef-attributes.conf')
       .with_content('vm.swappiness = 10')
+      .with_content('kernel.sysrq = 1')
   end
 
   it 'make sure it runs sysctl -p' do
