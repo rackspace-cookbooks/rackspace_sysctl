@@ -17,9 +17,9 @@ Usage
 
 There are two ways of setting sysctl values:
 
-1. Set chef attributes in the **sysctl** namespace. e.g.:
+1. Set chef attributes in the **rackspace_sysctl** namespace. The `key` should be the exact directive expected by sysctl:
 
-        node.set['rackspace_sysctl']['set swappiness'] = { 'vm.swappiness' => '20' }
+        node.set['rackspace_sysctl']['config']['vm.swappiness'] = 10
 
 2. Set values in a `cookbook_file` Resource.
 3. With Ressource/Provider.
