@@ -1,4 +1,4 @@
-rackspace_syslog
+rackspace_sysctl
 ================
 This cookbook allows for setting syctl attributes by use of either a LWRP or by populating a known hash which will write out all values to sysctl.conf.
 
@@ -29,8 +29,8 @@ Resource/Provider
 
 This Cookbook includes two LWRPs:
 
-1. **sysctl**
-2. **sysctl_multi**
+1. **rackspace_sysctl**
+2. **rackspace_sysctl_multi**
 
 sysctl
 ------
