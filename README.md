@@ -32,7 +32,7 @@ This Cookbook includes two LWRPs:
 1. **rackspace_sysctl**
 2. **rackspace_sysctl_multi**
 
-sysctl
+rackspace_sysctl
 ------
 
 ## Actions
@@ -52,30 +52,30 @@ sysctl
 ###ruby
 
     # Set 'vm.swappiness' to '60'. Will create /etc/sysctl.d/40-vm.wappiness.conf
-    sysctl 'vm.swappiness' do
+    rackspace_sysctl 'vm.swappiness' do
         value '40'
     end
 
 ####the same. will create `/etc/sysctl.d/40-vm_swappiness_to_60.conf`
 
-    sysctl 'vm swappiness to 60' do
+    rackspace_sysctl 'vm swappiness to 60' do
       variable 'vm.swappiness'
       value '60'
     end
 
 ####Remove /etc/sysctl.d/40-ip_config.conf
-    sysctl 'ip config' do
+    rackspace_sysctl 'ip config' do
       action :remove
     end
 
 #### Set swappiness but don't save it.
-    sysctl 'vm.swappiness' do
+    rackspace_sysctl 'vm.swappiness' do
       action :set
       value '40'
     end
 
 
-sysctl_multi
+rackspace_sysctl_multi
 ------------
 
 ### Actions
@@ -94,7 +94,7 @@ sysctl_multi
 
 ####ruby
 ### set multi variables. will create /etc/sysctl.d/69-ip_config.conf
-    sysctl_multi 'ip config' do
+    rackspace_sysctl_multi 'ip config' do
       instructions {
         'net.ipv4.ip_forward' => '1',
         'net.ipv6.conf.all.forwarding' => '1',
